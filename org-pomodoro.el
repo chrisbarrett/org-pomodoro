@@ -205,7 +205,10 @@ or :break when starting a break.")
   "Set the modeline accordingly to the current state."
   (setq org-pomodoro-mode-line
         (unless (eq org-pomodoro-state :none)
-          (let ((s (cl-case org-pomodoro-state
+          (let ((time (if org-pomodoro-show-seconds
+                          (org-pomodoro-minutes)
+                        (1+ (string-to-number (org-pomodoro-minutes)))))
+                (s (cl-case org-pomodoro-state
                      (:pomodoro
                       (propertize org-pomodoro-format
                                   'face 'org-pomodoro-mode-line))
@@ -215,7 +218,8 @@ or :break when starting a break.")
                      (:long-break
                       (propertize org-pomodoro-long-break-format
                                   'face 'org-pomodoro-mode-line-break)))))
-            (list "[" (format s (org-pomodoro-minutes)) "] "))))
+
+            (list "[" (format s time) "] "))))
 
   (force-mode-line-update))
 
