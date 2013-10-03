@@ -291,7 +291,6 @@ This may send a notification, play a sound and start a pomodoro break."
 (defun org-pomodoro-killed ()
   "Is invoked when a pomodoro was killed.
 This may send a notification, play a sound and adds log."
-  (alert-message-notify "One does not simply kill a pomodoro!")
   (when (org-clocking-p)
     (org-clock-cancel))
   (org-pomodoro-reset)
@@ -301,7 +300,6 @@ This may send a notification, play a sound and adds log."
 (defun org-pomodoro-short-break-finished ()
   "Is invoked when a break is finished.
 This may send a notification and play a sound."
-  (alert-message-notify "Short break finished. Ready for another pomodoro?")
   (org-pomodoro-play-sound org-pomodoro-short-break-sound)
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-short-break-finished-hook)
   (org-pomodoro-reset))
