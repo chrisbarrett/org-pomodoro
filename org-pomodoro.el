@@ -3,7 +3,7 @@
 ;; Author: Arthur Leonard Andersen <leoc.git@gmail.com>, Marcin Koziej <marcin at lolownia dot org>
 ;; Created: May 10, 2013
 ;; Version: 1.0
-;; Package-Requires: ((alert "0.5.10"))
+;; Package-Requires: ((s "1.6.0") (cl-lib "0.3"))
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@
 (require 'timer)
 (require 'org)
 (require 'org-timer)
-(require 'alert)
+(require 's)
+(require 'cl-lib)
 
 ;; -----------------------------
 ;; Customizables
