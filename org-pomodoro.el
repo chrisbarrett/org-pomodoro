@@ -118,7 +118,10 @@
   :group 'org-pomodoro
   :type 'file)
 
-(defcustom org-pomodoro-audio-player "/usr/bin/aplay"
+(defcustom org-pomodoro-audio-player
+  (if (equal system-type 'darwin)
+      (executable-find "afplay")
+    "/usr/bin/aplay")
   "Music player used to play sounds."
   :group 'org-pomodoro
   :type 'string)
