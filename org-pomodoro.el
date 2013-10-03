@@ -56,6 +56,11 @@
   :group 'org-pomodoro
   :type 'boolean)
 
+(defcustom org-pomodoro-show-seconds t
+  "Determines whether to show seconds in the timer display."
+  :group 'org-pomodoro
+  :type 'boolean)
+
 ;; POMODORO VALUES
 (defcustom org-pomodoro-length 25
   "The length of a pomodoro in minutes."
@@ -177,9 +182,11 @@ or :break when starting a break.")
 
 (defun org-pomodoro-minutes ()
   "Return the current countdown value in minutes as string."
-  (let ((hms (org-timer-secs-to-hms org-pomodoro-countdown)))
-    (substring hms (- (length hms) 5))))
-
+  (cl-destructuring-bind (h m s)
+      (s-split ":" (org-timer-secs-to-hms org-pomodoro-countdown))
+    (if org-pomodoro-show-seconds
+        (s-join ":" (list m s))
+      m)))
 
 (defun org-pomodoro-update-mode-line ()
   "Set the modeline accordingly to the current state."
