@@ -277,12 +277,8 @@ This may send a notification, play a sound and start a pomodoro break."
   (org-pomodoro-play-sound org-pomodoro-sound)
   (setq org-pomodoro-count (+ org-pomodoro-count 1))
   (if (> org-pomodoro-count org-pomodoro-long-break-frequency)
-      (progn
-        (alert-message-notify "Pomodoro completed! Time for a long break.")
-        (org-pomodoro-start :long-break))
-    (progn
-      (alert-message-notify "Pomodoro completed! Time for a short break.")
-      (org-pomodoro-start :short-break)))
+      (org-pomodoro-start :long-break)
+    (org-pomodoro-start :short-break))
   (run-hooks 'org-pomodoro-finished-hook)
   (org-pomodoro-update-mode-line))
 
@@ -310,7 +306,6 @@ This may send a notification and play a sound."
 (defun org-pomodoro-long-break-finished ()
   "Is invoked when a long break is finished.
 This may send a notification and play a sound."
-  (alert-message-notify "Long break finished. Ready for another pomodoro?")
   (org-pomodoro-play-sound org-pomodoro-long-break-sound)
   (setq org-pomodoro-count 0)
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-long-break-finished-hook)
