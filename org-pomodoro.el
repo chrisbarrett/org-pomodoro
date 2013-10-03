@@ -42,6 +42,7 @@
 ;; -----------------------------
 ;; Customizables
 ;; -----------------------------
+
 (defgroup org-pomodoro nil
   "Org pomodoro customization"
   :tag "Org Pomodoro"
@@ -129,6 +130,7 @@
 ;; -----------------------------
 ;; Hooks
 ;; -----------------------------
+
 (defvar org-pomodoro-started-hook nil
   "Hooks run when a pomodoro is started.")
 
@@ -151,6 +153,7 @@ Run before a break's specific hook.")
 ;; -----------------------------
 ;; Faces
 ;; -----------------------------
+
 (defface org-pomodoro-mode-line
   '((t (:foreground "tomato1")))
   "Org Pomodoro mode line color"
@@ -163,6 +166,7 @@ Run before a break's specific hook.")
 ;; -----------------------------
 ;; Temporary Variables
 ;; -----------------------------
+
 (defvar org-pomodoro-mode-line "")
 (put 'org-pomodoro-mode-line 'risky-local-variable t)
 
@@ -183,6 +187,7 @@ or :break when starting a break.")
 ;; -----------------------------
 ;; Helper Functions
 ;; -----------------------------
+
 (defun org-pomodoro-play-sound (sound)
   "Play an audio file specified by SOUND."
   (when (and org-pomodoro-play-sounds sound (executable-find org-pomodoro-audio-player))
@@ -219,7 +224,6 @@ or :break when starting a break.")
   (org-pomodoro-reset)
   (org-pomodoro-killed))
 
-
 (defun org-pomodoro-tick ()
   "A callback that is invoked by the running timer each second.
 It checks whether we reached the duration of the current phase, when 't it
@@ -234,7 +238,6 @@ invokes the handlers for finishing."
           (:short-break (org-pomodoro-short-break-finished))
           (:long-break (org-pomodoro-long-break-finished))))))
   (org-pomodoro-update-mode-line))
-
 
 (defun org-pomodoro-start (&optional state)
   "Start the `org-pomodoro` timer.
@@ -257,7 +260,6 @@ The argument STATE is optional.  The default state is `:pomodoro`."
     (run-hooks 'org-pomodoro-started-hook))
   (org-pomodoro-update-mode-line))
 
-
 (defun org-pomodoro-reset ()
   "Reset the org-pomodoro state."
   (when org-pomodoro-timer
@@ -266,10 +268,10 @@ The argument STATE is optional.  The default state is `:pomodoro`."
         org-pomodoro-countdown 0)
   (org-pomodoro-update-mode-line))
 
-
 ;; -----------------------------
 ;; Handlers for pomodoro events.
 ;; -----------------------------
+
 (defun org-pomodoro-finished ()
   "Is invoked when a pomodoro was finished successfully.
 This may send a notification, play a sound and start a pomodoro break."
@@ -282,7 +284,6 @@ This may send a notification, play a sound and start a pomodoro break."
   (run-hooks 'org-pomodoro-finished-hook)
   (org-pomodoro-update-mode-line))
 
-
 (defun org-pomodoro-killed ()
   "Is invoked when a pomodoro was killed.
 This may send a notification, play a sound and adds log."
@@ -293,7 +294,6 @@ This may send a notification, play a sound and adds log."
   (run-hooks 'org-pomodoro-killed-hook)
   (org-pomodoro-update-mode-line))
 
-
 (defun org-pomodoro-short-break-finished ()
   "Is invoked when a break is finished.
 This may send a notification and play a sound."
@@ -301,7 +301,6 @@ This may send a notification and play a sound."
   (org-pomodoro-play-sound org-pomodoro-short-break-sound)
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-short-break-finished-hook)
   (org-pomodoro-reset))
-
 
 (defun org-pomodoro-long-break-finished ()
   "Is invoked when a long break is finished.
@@ -314,6 +313,7 @@ This may send a notification and play a sound."
 ;; ---------------------------------------
 ;; The actual function to handle pomodoros
 ;; ---------------------------------------
+
 ;;;###autoload
 (defun org-pomodoro ()
   "Start a new pomodoro or stop the current one.
