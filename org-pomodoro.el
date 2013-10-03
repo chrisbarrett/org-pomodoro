@@ -39,9 +39,7 @@
 (require 's)
 (require 'cl-lib)
 
-;; -----------------------------
-;; Customizables
-;; -----------------------------
+;;; Custom Interface
 
 (defgroup org-pomodoro nil
   "Org pomodoro customization"
@@ -63,7 +61,8 @@
   :group 'org-pomodoro
   :type 'boolean)
 
-;; POMODORO VALUES
+;; Pomodoro Values
+
 (defcustom org-pomodoro-length 25
   "The length of a pomodoro in minutes."
   :group 'org-pomodoro
@@ -85,7 +84,8 @@
   :group 'org-pomodoro
   :type 'file)
 
-;; SHORT BREAK VALUES
+;; Short break Values
+
 (defcustom org-pomodoro-short-break-length 5
   "The length of a break in minutes."
   :group 'org-pomodoro
@@ -102,7 +102,8 @@
   :group 'org-pomodoro
   :type 'file)
 
-;; LONG BREAK VALUES
+;; Long Break Values
+
 (defcustom org-pomodoro-long-break-length 20
   "The length of a long break in minutes."
   :group 'org-pomodoro
@@ -127,9 +128,7 @@
   :group 'org-pomodoro
   :type 'string)
 
-;; -----------------------------
-;; Hooks
-;; -----------------------------
+;;; Hooks
 
 (defvar org-pomodoro-started-hook nil
   "Hooks run when a pomodoro is started.")
@@ -150,9 +149,7 @@ Run before a break's specific hook.")
 (defvar org-pomodoro-short-break-finished-hook nil
   "Hooks run when short break is finished.")
 
-;; -----------------------------
 ;; Faces
-;; -----------------------------
 
 (defface org-pomodoro-mode-line
   '((t (:foreground "tomato1")))
@@ -163,9 +160,9 @@ Run before a break's specific hook.")
   '((t (:foreground "#2aa198"))) ; cyan
   "Face for pomodoro indicator when on a break.")
 
-;; -----------------------------
+;;; Internal
+
 ;; Temporary Variables
-;; -----------------------------
 
 (defvar org-pomodoro-mode-line "")
 (put 'org-pomodoro-mode-line 'risky-local-variable t)
@@ -184,9 +181,7 @@ or :break when starting a break.")
 (defvar org-pomodoro-count 0
   "The number of pomodoros since the last long break.")
 
-;; -----------------------------
 ;; Helper Functions
-;; -----------------------------
 
 (defun org-pomodoro-play-sound (sound)
   "Play an audio file specified by SOUND."
@@ -268,9 +263,7 @@ The argument STATE is optional.  The default state is `:pomodoro`."
         org-pomodoro-countdown 0)
   (org-pomodoro-update-mode-line))
 
-;; -----------------------------
-;; Handlers for pomodoro events.
-;; -----------------------------
+;; Pomodoro event handlers
 
 (defun org-pomodoro-finished ()
   "Is invoked when a pomodoro was finished successfully.
@@ -309,10 +302,6 @@ This may send a notification and play a sound."
   (setq org-pomodoro-count 0)
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-long-break-finished-hook)
   (org-pomodoro-reset))
-
-;; ---------------------------------------
-;; The actual function to handle pomodoros
-;; ---------------------------------------
 
 ;;;###autoload
 (defun org-pomodoro ()
