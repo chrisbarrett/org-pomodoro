@@ -61,6 +61,11 @@
   :group 'org-pomodoro
   :type 'boolean)
 
+(defcustom org-pomodoro-show-in-mode-line t
+  "Determines whether to display a timer in the modeline."
+  :group 'org-pomodoro
+  :type 'boolean)
+
 ;; Pomodoro Values
 
 (defcustom org-pomodoro-length 25
@@ -239,11 +244,12 @@ invokes the handlers for finishing."
 The argument STATE is optional.  The default state is `:pomodoro`."
   (when org-pomodoro-timer (cancel-timer org-pomodoro-timer))
 
-  ;; add the org-pomodoro-mode-line to the global-mode-string
-  (unless global-mode-string (setq global-mode-string '("")))
-  (unless (memq 'org-pomodoro-mode-line global-mode-string)
-    (setq global-mode-string (append global-mode-string
-                                     '(org-pomodoro-mode-line))))
+  (when org-pomodoro-show-in-mode-line
+    ;; add the org-pomodoro-mode-line to the global-mode-string
+    (unless global-mode-string (setq global-mode-string '("")))
+    (unless (memq 'org-pomodoro-mode-line global-mode-string)
+      (setq global-mode-string (append global-mode-string
+                                       '(org-pomodoro-mode-line)))))
   (unless state (setq state :pomodoro))
   (setq org-pomodoro-state state
 
