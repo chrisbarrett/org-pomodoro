@@ -246,13 +246,18 @@ The argument STATE is optional.  The default state is `:pomodoro`."
                                      '(org-pomodoro-mode-line))))
   (unless state (setq state :pomodoro))
   (setq org-pomodoro-state state
-        org-pomodoro-countdown (case state
-                                 (:pomodoro (* 60 org-pomodoro-length))
-                                 (:short-break (* 60 org-pomodoro-short-break-length))
-                                 (:long-break (* 60 org-pomodoro-long-break-length)))
+
+        org-pomodoro-countdown
+        (cl-case state
+          (:pomodoro (* 60 org-pomodoro-length))
+          (:short-break (* 60 org-pomodoro-short-break-length))
+          (:long-break (* 60 org-pomodoro-long-break-length)))
+
         org-pomodoro-timer (run-with-timer t 1 'org-pomodoro-tick))
+
   (when (eq org-pomodoro-state :pomodoro)
     (run-hooks 'org-pomodoro-started-hook))
+
   (org-pomodoro-update-mode-line))
 
 (defun org-pomodoro-reset ()
