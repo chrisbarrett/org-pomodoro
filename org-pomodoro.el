@@ -152,6 +152,10 @@ Run before a break's specific hook.")
   "Org Pomodoro mode line color"
   :group 'faces)
 
+(defface org-pomodoro-mode-line-break
+  '((t (:foreground "#2aa198"))) ; cyan
+  "Face for pomodoro indicator when on a break.")
+
 ;; -----------------------------
 ;; Temporary Variables
 ;; -----------------------------
@@ -191,20 +195,20 @@ or :break when starting a break.")
 (defun org-pomodoro-update-mode-line ()
   "Set the modeline accordingly to the current state."
   (setq org-pomodoro-mode-line
-        (if (not (eq org-pomodoro-state :none))
-            (list
-             "["
-             (propertize (format (case org-pomodoro-state
-                                   (:none "")
-                                   (:pomodoro org-pomodoro-format)
-                                   (:short-break org-pomodoro-short-break-format)
-                                   (:long-break org-pomodoro-long-break-format))
-                                 (org-pomodoro-minutes))
-                         'face 'org-pomodoro-mode-line)
-             "] ")
-          nil))
-  (force-mode-line-update))
+        (unless (eq org-pomodoro-state :none)
+          (let ((s (cl-case org-pomodoro-state
+                     (:pomodoro
+                      (propertize org-pomodoro-format
+                                  'face 'org-pomodoro-mode-line))
+                     (:short-break
+                      (propertize org-pomodoro-short-break-format
+                                  'face 'org-pomodoro-mode-line-break))
+                     (:long-break
+                      (propertize org-pomodoro-long-break-format
+                                  'face 'org-pomodoro-mode-line-break)))))
+            (list "[" (format s (org-pomodoro-minutes)) "] "))))
 
+  (force-mode-line-update))
 
 (defun org-pomodoro-kill ()
   "Kill the current timer, reset the phase and update the modeline."
