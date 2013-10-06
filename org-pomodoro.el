@@ -66,6 +66,13 @@
   :group 'org-pomodoro
   :type 'boolean)
 
+(defcustom org-pomodoro-expiry-time 120
+  "The time in minutes for which a pomodoro group is valid.
+If you do not clock in for a period you will be prompted whether
+to reset the pomodoro count next time you call `org-pomodoro'."
+  :group 'org-pomodoro
+  :type 'integer)
+
 ;; Pomodoro Values
 
 (defcustom org-pomodoro-length 25
@@ -316,6 +323,14 @@ This may send a notification and play a sound."
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-long-break-finished-hook)
   (org-pomodoro-reset))
 
+(defvar org-pomodoro-last-clock-in nil
+  "The last time the pomodoro was set.")
+
+(cl-defun org-pomodoro-expired? ((_ current-time-secs _ _)
+                                 (_ last-time-secs _ _))
+  (let ((delta-mins (/ (- current-time-secs last-time-secs) 60)))
+    (< org-pomodoro-expiry-time delta-mins)))
+
 ;;;###autoload
 (defun org-pomodoro ()
   "Start a new pomodoro or stop the current one.
@@ -323,6 +338,15 @@ When no timer is running for `org-pomodoro` a new pomodoro is started and
 the current task is clocked in.  Otherwise EMACS will ask whether we´d like to
 kill the current timer, this may be a break or a running pomodoro."
   (interactive)
+
+  ;; Offer to reset the pomodoro count after a period without clocking.
+  (when (and
+         org-pomodoro-last-clock-in
+         (org-pomodoro-expired? (current-time) org-pomodoro-last-clock-in)
+         (y-or-n-p "Reset pomodoro count? "))
+    (setq org-pomodoro-count 0))
+  (setq org-pomodoro-last-clock-in (current-time))
+
   (if (equal org-pomodoro-state :none)
       (progn
         (cond
