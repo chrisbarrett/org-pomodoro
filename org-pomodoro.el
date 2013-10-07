@@ -292,10 +292,12 @@ The argument STATE is optional.  The default state is `:pomodoro`."
 This may send a notification, play a sound and start a pomodoro break."
   (org-clock-out nil t)
   (org-pomodoro-play-sound org-pomodoro-sound)
-  (setq org-pomodoro-count (+ org-pomodoro-count 1))
-  (if (> org-pomodoro-count org-pomodoro-long-break-frequency)
-      (org-pomodoro-start :long-break)
-    (org-pomodoro-start :short-break))
+  (cl-incf org-pomodoro-count)
+  (cond
+   ((zerop (mod org-pomodoro-count org-pomodoro-long-break-frequency))
+    (org-pomodoro-start :long-break))
+   (t
+    (org-pomodoro-start :short-break)))
   (run-hooks 'org-pomodoro-finished-hook)
   (org-pomodoro-update-mode-line))
 
@@ -319,7 +321,6 @@ This may send a notification and play a sound."
   "Is invoked when a long break is finished.
 This may send a notification and play a sound."
   (org-pomodoro-play-sound org-pomodoro-long-break-sound)
-  (setq org-pomodoro-count 0)
   (run-hooks 'org-pomodoro-break-finished-hook 'org-pomodoro-long-break-finished-hook)
   (org-pomodoro-reset))
 
